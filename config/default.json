@@ -1,3 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://mortiz11:epeHm808TvnfOyDv@merncourse.t5ugph7.mongodb.net/?retryWrites=true&w=majority&appName=MernCourse"
+    "mongoURI": "mongodb+srv://mortiz11:epeHm808TvnfOyDv@merncourse.t5ugph7.mongodb.net/?retryWrites=true&w=majority&appName=MernCourse",
+    "jwtSecret": "mysecrettoken"
 }
