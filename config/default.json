@@ -1,4 +1,6 @@
 {
     "mongoURI": "mongodb+srv://mortiz11:epeHm808TvnfOyDv@merncourse.t5ugph7.mongodb.net/?retryWrites=true&w=majority&appName=MernCourse",
-    "jwtSecret": "mysecrettoken"
+    "jwtSecret": "mysecrettoken",
+    "githubClientId": "Ov23liJtH97rx7OlHggj",
+    "githubSecret": " 7bf76234ee65352d1960bfb5de55a0fe9c061bf7"
 }
