@@ -15,6 +15,7 @@ import Profiles from './components/profiles/Profiles';
 import Profile from './components/profile/Profile';
 import Posts from './components/posts/Posts';
 import Post from './components/post/Post';
+import NotFound from './components/layout/NotFound';
 //Redux
 import { Provider } from 'react-redux';
 import store from './store';
@@ -95,6 +96,7 @@ const App = () => {
                 </PrivateRoute>
               }
             />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </section>
       </Fragment>
