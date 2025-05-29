@@ -3,7 +3,6 @@ import { Link, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/auth';
-// import axios from 'axios';
 
 const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -30,7 +29,7 @@ const Login = ({ login, isAuthenticated }) => {
       <p className="lead"><i className="fas fa-user"></i> Sign Into Your Account</p>
       <form className="form" action="create-profile.html" onSubmit={onSubmit}>
         <div className="form-group">
-          <input 
+          <input
             type="email"
             placeholder="Email Address"
             name="email"
@@ -54,7 +53,7 @@ const Login = ({ login, isAuthenticated }) => {
       </form>
       <p className="my-1">
       Don't have an account? <Link to="/register">Sign Up</Link>
-      </p>    
+      </p>
     </>
   )
 };

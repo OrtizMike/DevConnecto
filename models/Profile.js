@@ -87,25 +87,23 @@ const ProfileSchema = mongoose.Schema({
             }
         }
     ],
-    social: [
-        {
-            youtube: {
-                type: String
-            },
-            twitter: {
-                type: String
-            },
-            facebook: {
-                type: String
-            },
-            linkedin: {
-                type: String
-            },
-            instagram: {
-                type: String
-            },
-        }
-    ]
+    social:{
+        youtube: {
+            type: String
+        },
+        twitter: {
+            type: String
+        },
+        facebook: {
+            type: String
+        },
+        linkedin: {
+            type: String
+        },
+        instagram: {
+            type: String
+        },
+    }
 });
 
 module.exports = Profile = mongoose.model('profile', ProfileSchema);

@@ -8,6 +8,7 @@ const { check, validationResult } = require('express-validator');
 
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 
 // @route       GET api/profile/me
 // @description Get current user's profile
@@ -18,6 +19,7 @@ router.get('/me', auth, async (req, res) => {
         if(!profile) {
             return res.status(400).json({ message: "There is no profile for this user" });
         }
+        res.json(profile);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -35,11 +37,11 @@ router.post('/', [auth, [
     check('skills', 'Skills is required')
     .not()
     .isEmpty()
-]], 
+]],
 async (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
-        return res.status(400).json({ erros: errors.array() })
+        return res.status(400).json({ errors: errors.array() })
     }
 
     const {
@@ -70,7 +72,7 @@ async (req, res) => {
     if(skills) {
         profileFields.skills = skills.split(',').map(skill => skill.trim())
     }
-    
+
     profileFields.social = {}
     if(youtube) profileFields.social.youtube = youtube
     if(facebook) profileFields.social.facebook = facebook
@@ -118,16 +120,16 @@ router.get('/', async (req, res) => {
 
 
 // @route       GET api/profile/user/:user_id
-// @description Get all Profiles
+// @description Get Profile by id
 // @access      Public
 router.get('/user/:user_id', async (req, res) => {
     try {
-        const profile = await Profile.findOne({ user: req.params.user_id    }).populate('user', ['name', 'avatar']);
-        
+        const profile = await Profile.findOne({ user: req.params.user_id }).populate('user', ['name', 'avatar']);
+
         if(!profile) return res.status(400).json({ message: 'Profile not found' })
+
         res.json(profile)
     } catch (err) {
-        console.error(err.message);
         if(err.kind === "ObjectId") return res.status(400).json({ message: 'Profile not found' })
         res.status(500).send('Server error');
     }
@@ -139,13 +141,14 @@ router.get('/user/:user_id', async (req, res) => {
 // @access      Public
 router.delete('/', auth, async (req, res) => {
     try {
-        // @todo - remove users posts
+        // Remove users posts
+        await Post.deleteMany({ user: req.user.id });
 
         // Remove Profile
         await Profile.findOneAndDelete({ user: req.user.id });
-        
+
         await User.findOneAndDelete({ _id: req.user.id });
-        
+
         res.json({ msg: "User Deleted" })
     } catch (err) {
         console.error(err.message);
@@ -157,7 +160,7 @@ router.delete('/', auth, async (req, res) => {
 // @description Add Profile Experience
 // @access      Private
 router.put('/experience', [
-    auth, 
+    auth,
     [
         check('title', 'Title is required')
             .not()
@@ -171,7 +174,7 @@ router.put('/experience', [
     ]], async (req, res) => {
         const errors = validationResult(req);
         if(!errors.isEmpty()){
-            return res.status(400).json({ erros: errors.array() })
+            return res.status(400).json({ errors: errors.array() })
         }
 
         const {
@@ -200,7 +203,7 @@ router.put('/experience', [
             profile.experience.unshift(newExp);
 
             await profile.save();
-            
+
             res.json(profile);
         } catch (err) {
             console.error(err.message);
@@ -214,7 +217,7 @@ router.put('/experience', [
 router.delete('/experience/:exp_id', auth, async (req, res) => {
     try {
         const profile = await Profile.findOne({ user: req.user.id })
-        
+
         const removeIndex = profile.experience.map(item => item.id)
                                               .indexOf(req.params.exp_id);
 
@@ -232,7 +235,7 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
 // @description Add Profile Education
 // @access      Private
 router.put('/education', [
-    auth, 
+    auth,
     [
         check('school', 'School is required')
             .not()
@@ -249,7 +252,7 @@ router.put('/education', [
     ]], async (req, res) => {
         const errors = validationResult(req);
         if(!errors.isEmpty()){
-            return res.status(400).json({ erros: errors.array() })
+            return res.status(400).json({ errors: errors.array() })
         }
 
         const {
@@ -277,7 +280,7 @@ router.put('/education', [
             profile.education.unshift(newEdu);
 
             await profile.save();
-            
+
             res.json(profile);
         } catch (err) {
             console.error(err.message);
@@ -291,7 +294,7 @@ router.put('/education', [
 router.delete('/education/:edu_id', auth, async (req, res) => {
     try {
         const profile = await Profile.findOne({ user: req.user.id })
-        
+
         const removeIndex = profile.education.map(item => item.id)
                                               .indexOf(req.params.edu_id);
 
